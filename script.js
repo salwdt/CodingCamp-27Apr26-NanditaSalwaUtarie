@@ -218,6 +218,16 @@ function initDashboard() {
     return notifs;
   }
 
+  // Tampilkan dot merah kalau belum pernah dibuka hari ini
+  const NOTIF_READ_KEY = 'pk_notif_read';
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  function updateDot() {
+    const lastRead = localStorage.getItem(NOTIF_READ_KEY);
+    const dot = notifBtn.querySelector('.notif-dot');
+    if (dot) dot.style.display = lastRead === todayStr ? 'none' : 'block';
+  }
+
   function openNotif() {
     const notifs = buildNotifs();
     notifList.innerHTML = notifs.length
@@ -231,8 +241,14 @@ function initDashboard() {
             </div>
           </div>`).join('')
       : '<p class="notif-empty">Tidak ada notifikasi</p>';
+
+    // Tandai sudah dibaca
+    localStorage.setItem(NOTIF_READ_KEY, todayStr);
+    updateDot();
     notifOverlay.classList.add('open');
   }
+
+  updateDot(); // cek saat halaman load
 
   notifBtn.addEventListener('click', openNotif);
   notifClose.addEventListener('click', () => notifOverlay.classList.remove('open'));
