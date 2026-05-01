@@ -250,6 +250,9 @@
   </div>
 
   <script>
+    // Apply saved theme
+    if (localStorage.getItem('pk_theme') === 'dark') document.body.classList.add('dark');
+
     function show(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
       document.getElementById(id).classList.remove('hidden');

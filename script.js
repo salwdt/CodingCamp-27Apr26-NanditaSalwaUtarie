@@ -693,6 +693,36 @@ function initProfil() {
     showToast('Target disimpan');
   });
 
+  // Tampilan (Light/Dark)
+  function applyTheme(mode) {
+    if (mode === 'dark') {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+    localStorage.setItem('pk_theme', mode);
+    const lbl = document.getElementById('theme-label');
+    if (lbl) lbl.textContent = mode === 'dark' ? 'Dark' : 'Light';
+  }
+
+  function updateThemeUI() {
+    const isDark = localStorage.getItem('pk_theme') === 'dark';
+    document.getElementById('opt-light').classList.toggle('active', !isDark);
+    document.getElementById('opt-dark').classList.toggle('active', isDark);
+    document.getElementById('check-light').textContent = isDark ? '' : '✓';
+    document.getElementById('check-dark').textContent  = isDark ? '✓' : '';
+    const lbl = document.getElementById('theme-label');
+    if (lbl) lbl.textContent = isDark ? 'Dark' : 'Light';
+  }
+
+  document.getElementById('menu-theme').addEventListener('click', () => {
+    updateThemeUI();
+    document.getElementById('modal-theme').classList.add('open');
+  });
+  document.getElementById('close-theme').addEventListener('click', () => document.getElementById('modal-theme').classList.remove('open'));
+  document.getElementById('opt-light').addEventListener('click', () => { applyTheme('light'); updateThemeUI(); });
+  document.getElementById('opt-dark').addEventListener('click',  () => { applyTheme('dark');  updateThemeUI(); });
+
   // Notifikasi
   const NOTIF_PREF = 'pk_notif_pref';
   document.getElementById('menu-notif').addEventListener('click', () => {
@@ -729,6 +759,11 @@ function initProfil() {
    AUTO INIT
 ════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
+  // Apply saved theme on every page load
+  if (localStorage.getItem('pk_theme') === 'dark') {
+    document.body.classList.add('dark');
+  }
+
   const page = document.body.dataset.page;
   if (page === 'dashboard')  initDashboard();
   if (page === 'statistik')  initStatistik();
