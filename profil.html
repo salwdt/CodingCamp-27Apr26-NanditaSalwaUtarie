@@ -82,6 +82,49 @@
         </div>
       </div>
 
+      <!-- Notifikasi Modal -->
+      <div class="modal-overlay" id="modal-notif">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>Pengaturan Notifikasi</h3>
+            <button class="modal-close" id="close-notif">✕</button>
+          </div>
+          <div class="notif-toggle-list">
+            <div class="notif-toggle-item">
+              <div>
+                <p class="notif-toggle-title">Saldo Hampir Habis</p>
+                <p class="notif-toggle-desc">Peringatan saat saldo di bawah Rp 500.000</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="notif-saldo" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="notif-toggle-item">
+              <div>
+                <p class="notif-toggle-title">Ringkasan Bulanan</p>
+                <p class="notif-toggle-desc">Info pemasukan & pengeluaran bulan ini</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="notif-bulanan" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="notif-toggle-item">
+              <div>
+                <p class="notif-toggle-title">Pengingat Harian</p>
+                <p class="notif-toggle-desc">Ingatkan jika belum ada catatan hari ini</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="notif-harian" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          <button class="btn-save" id="btn-save-notif">Simpan</button>
+        </div>
+      </div>
+
       <!-- Edit Profil Modal -->
       <div class="modal-overlay" id="modal-edit">
         <div class="modal">

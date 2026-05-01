@@ -636,6 +636,26 @@ function initProfil() {
     showToast('Target disimpan');
   });
 
+  // Notifikasi
+  const NOTIF_PREF = 'pk_notif_pref';
+  document.getElementById('menu-notif').addEventListener('click', () => {
+    const pref = JSON.parse(localStorage.getItem(NOTIF_PREF) || '{}');
+    document.getElementById('notif-saldo').checked   = pref.saldo   !== false;
+    document.getElementById('notif-bulanan').checked = pref.bulanan !== false;
+    document.getElementById('notif-harian').checked  = pref.harian  !== false;
+    document.getElementById('modal-notif').classList.add('open');
+  });
+  document.getElementById('close-notif').addEventListener('click', () => document.getElementById('modal-notif').classList.remove('open'));
+  document.getElementById('btn-save-notif').addEventListener('click', () => {
+    localStorage.setItem(NOTIF_PREF, JSON.stringify({
+      saldo:   document.getElementById('notif-saldo').checked,
+      bulanan: document.getElementById('notif-bulanan').checked,
+      harian:  document.getElementById('notif-harian').checked,
+    }));
+    document.getElementById('modal-notif').classList.remove('open');
+    showToast('Pengaturan notifikasi disimpan');
+  });
+
   document.getElementById('menu-reset').addEventListener('click', () => {
     if (!confirm('Reset semua data transaksi?')) return;
     saveTransactions([]);
