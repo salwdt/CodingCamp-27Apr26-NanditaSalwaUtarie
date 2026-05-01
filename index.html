@@ -226,10 +226,12 @@
       <div class="screen-brand">PinkPocket</div>
       <div class="screen-title">Create your Account</div>
 
-      <div class="form-group"><input class="form-input" type="text" placeholder="Full Name" /></div>
-      <div class="form-group"><input class="form-input" type="email" placeholder="Email" /></div>
-      <div class="form-group"><input class="form-input" type="password" placeholder="Password" /></div>
-      <div class="form-group"><input class="form-input" type="password" placeholder="Confirm Password" /></div>
+      <div class="form-group"><input class="form-input" type="text" id="reg-name" placeholder="Nama Lengkap" /></div>
+      <div class="form-group"><input class="form-input" type="email" id="reg-email" placeholder="Email" /></div>
+      <div class="form-group"><input class="form-input" type="password" id="reg-pass" placeholder="Password" /></div>
+      <div class="form-group"><input class="form-input" type="password" id="reg-pass2" placeholder="Confirm Password" /></div>
+
+      <p id="reg-error" style="color:#e05c6e;font-size:12px;margin-bottom:8px;display:none"></p>
 
       <button class="btn-primary" id="btn-register">Sign up</button>
 
@@ -252,12 +254,43 @@
       document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
       document.getElementById(id).classList.remove('hidden');
     }
+
     document.getElementById('screen-splash').addEventListener('click', () => show('screen-login'));
-    document.getElementById('btn-login').addEventListener('click', () => { window.location.href = 'dashboard.html'; });
+
+    // Login — langsung masuk dashboard
+    document.getElementById('btn-login').addEventListener('click', () => {
+      window.location.href = 'dashboard.html';
+    });
+
+    // Register — validasi & simpan nama
+    document.getElementById('btn-register').addEventListener('click', () => {
+      const name  = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const pass  = document.getElementById('reg-pass').value;
+      const pass2 = document.getElementById('reg-pass2').value;
+      const err   = document.getElementById('reg-error');
+
+      if (!name)  { err.textContent = 'Nama tidak boleh kosong'; err.style.display = 'block'; return; }
+      if (!email) { err.textContent = 'Email tidak boleh kosong'; err.style.display = 'block'; return; }
+      if (!pass)  { err.textContent = 'Password tidak boleh kosong'; err.style.display = 'block'; return; }
+      if (pass !== pass2) { err.textContent = 'Password tidak cocok'; err.style.display = 'block'; return; }
+
+      err.style.display = 'none';
+
+      // Simpan profil ke localStorage
+      localStorage.setItem('pk_profile', JSON.stringify({ name, email }));
+      // Reset data lama supaya mulai fresh
+      localStorage.removeItem('pk_transactions');
+      localStorage.removeItem('pk_saldo_awal');
+      localStorage.setItem('pk_fresh_v1', '1');
+      localStorage.setItem('pk_seed_v5', '1');
+
+      window.location.href = 'dashboard.html';
+    });
+
     document.getElementById('btn-to-register').addEventListener('click', () => show('screen-register'));
     document.getElementById('btn-to-login').addEventListener('click', () => show('screen-login'));
     document.getElementById('btn-back').addEventListener('click', () => show('screen-login'));
-    document.getElementById('btn-register').addEventListener('click', () => { window.location.href = 'dashboard.html'; });
   </script>
 
 </body>
