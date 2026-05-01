@@ -575,8 +575,8 @@ mark {
   border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
-  font-size: 18px;
 }
+.notif-icon svg { stroke: #555566; }
 .notif-body { flex: 1; min-width: 0; }
 .notif-title { font-size: 13px; font-weight: 700; color: var(--text); }
 .notif-desc  { font-size: 11px; color: var(--sub); margin-top: 2px; line-height: 1.4; }

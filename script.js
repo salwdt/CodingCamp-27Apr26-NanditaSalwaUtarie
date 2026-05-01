@@ -188,25 +188,31 @@ function initDashboard() {
     monthTxs.forEach(t => t.type === 'pemasukan' ? mi += t.amount : me += t.amount);
     const saldo = mi - me;
 
+    const iconWarn  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+    const iconMoney = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`;
+    const iconInc   = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`;
+    const iconNote  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>`;
+    const iconCheck = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><polyline points="20 6 9 17 4 12"/></svg>`;
+
     if (saldo < 500000 && saldo >= 0) {
-      notifs.push({ icon: '⚠️', bg: '#fff8e1', title: 'Saldo Hampir Habis', desc: `Saldo kamu tinggal ${fmtRp(saldo)}. Pertimbangkan mengurangi pengeluaran.`, time: 'Hari ini', unread: true });
+      notifs.push({ icon: iconWarn,  bg: '#fff8e1', title: 'Saldo Hampir Habis', desc: `Saldo kamu tinggal ${fmtRp(saldo)}. Pertimbangkan mengurangi pengeluaran.`, time: 'Hari ini', unread: true });
     }
 
     const monthExp = monthTxs.filter(t => t.type === 'pengeluaran');
     if (monthExp.length) {
       const biggest = monthExp.reduce((a, b) => a.amount > b.amount ? a : b);
-      notifs.push({ icon: '💸', bg: '#fff0f2', title: 'Pengeluaran Terbesar', desc: `"${biggest.desc}" sebesar ${fmtRp(biggest.amount)} adalah pengeluaran terbesar bulan ini.`, time: 'Bulan ini', unread: false });
+      notifs.push({ icon: iconMoney, bg: '#fff0f2', title: 'Pengeluaran Terbesar', desc: `"${biggest.desc}" sebesar ${fmtRp(biggest.amount)} adalah pengeluaran terbesar bulan ini.`, time: 'Bulan ini', unread: false });
     }
 
     if (mi > 0) {
-      notifs.push({ icon: '💰', bg: '#f0fff8', title: 'Pemasukan Bulan Ini', desc: `Total pemasukan ${fmtRp(mi)}. Tetap semangat menabung!`, time: 'Bulan ini', unread: false });
+      notifs.push({ icon: iconInc,   bg: '#f0fff8', title: 'Pemasukan Bulan Ini', desc: `Total pemasukan ${fmtRp(mi)}. Tetap semangat menabung!`, time: 'Bulan ini', unread: false });
     }
 
     const todayTx = all.filter(t => t.date === today);
     if (todayTx.length === 0) {
-      notifs.push({ icon: '📝', bg: '#f5f5ff', title: 'Belum Ada Catatan Hari Ini', desc: 'Jangan lupa catat pengeluaran dan pemasukan hari ini ya!', time: 'Hari ini', unread: true });
+      notifs.push({ icon: iconNote,  bg: '#f5f5ff', title: 'Belum Ada Catatan Hari Ini', desc: 'Jangan lupa catat pengeluaran dan pemasukan hari ini ya!', time: 'Hari ini', unread: true });
     } else if (todayTx.length >= 3) {
-      notifs.push({ icon: '📊', bg: '#f0f0ff', title: 'Aktif Hari Ini', desc: `Kamu sudah mencatat ${todayTx.length} transaksi hari ini. Bagus!`, time: 'Hari ini', unread: false });
+      notifs.push({ icon: iconCheck, bg: '#f0f0ff', title: 'Aktif Hari Ini', desc: `Kamu sudah mencatat ${todayTx.length} transaksi hari ini. Bagus!`, time: 'Hari ini', unread: false });
     }
 
     return notifs;
