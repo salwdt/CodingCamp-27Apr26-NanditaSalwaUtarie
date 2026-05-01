@@ -9,6 +9,7 @@ const STORAGE_KEY = 'pk_transactions';
 const PROFILE_KEY = 'pk_profile';
 const TARGET_KEY  = 'pk_target';
 const SEED_VER    = 'pk_seed_v5';
+const SALDO_KEY   = 'pk_saldo_awal';
 
 function getTransactions() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; }
@@ -21,6 +22,8 @@ function getProfile() {
 function saveProfile(p) { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); }
 function getTarget() { return parseFloat(localStorage.getItem(TARGET_KEY)) || 0; }
 function saveTarget(v) { localStorage.setItem(TARGET_KEY, v); }
+function getSaldoAwal() { return parseFloat(localStorage.getItem(SALDO_KEY)) || 0; }
+function saveSaldoAwal(v) { localStorage.setItem(SALDO_KEY, v); }
 
 /* ── Helpers ── */
 function fmtRp(n) { return 'Rp ' + Math.abs(n).toLocaleString('id-ID'); }
@@ -71,22 +74,13 @@ function renderTxList(containerId, txList) {
 
 /* ── Seed demo data ── */
 function seedIfEmpty() {
-  if (localStorage.getItem(SEED_VER)) return;
-  localStorage.removeItem(STORAGE_KEY);
+  // Reset data lama jika ada seed demo
+  if (!localStorage.getItem('pk_fresh_v1')) {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(SALDO_KEY);
+    localStorage.setItem('pk_fresh_v1', '1');
+  }
   localStorage.setItem(SEED_VER, '1');
-  const cm = new Date().toISOString().slice(0, 7);
-  saveTransactions([
-    { id: 1,  type: 'pemasukan',   cat: 'Gaji',        desc: 'Gaji Bulanan',      amount: 8500000, date: `${cm}-01` },
-    { id: 2,  type: 'pemasukan',   cat: 'Investasi',   desc: 'Dividen Saham',     amount: 1200000, date: `${cm}-03` },
-    { id: 3,  type: 'pengeluaran', cat: 'Makanan',     desc: 'Makan Siang',       amount: 85000,   date: `${cm}-04` },
-    { id: 4,  type: 'pengeluaran', cat: 'Tagihan',     desc: 'Tagihan Listrik',   amount: 210000,  date: `${cm}-06` },
-    { id: 5,  type: 'pengeluaran', cat: 'Belanja',     desc: 'Belanja Online',    amount: 350000,  date: `${cm}-07` },
-    { id: 6,  type: 'pemasukan',   cat: 'Lainnya',     desc: 'Freelance',         amount: 500000,  date: `${cm}-08` },
-    { id: 7,  type: 'pengeluaran', cat: 'Hiburan',     desc: 'Langganan Netflix', amount: 54000,   date: `${cm}-09` },
-    { id: 8,  type: 'pengeluaran', cat: 'Makanan',     desc: 'Makan Malam',       amount: 65000,   date: `${cm}-10` },
-    { id: 9,  type: 'pemasukan',   cat: 'Gaji',        desc: 'Gaji Bulanan',      amount: 8500000, date: `${cm}-11` },
-    { id: 10, type: 'pengeluaran', cat: 'Transportasi',desc: 'Bensin',            amount: 120000,  date: `${cm}-12` },
-  ]);
 }
 
 /* ════════════════════════════════════
@@ -98,11 +92,17 @@ function initDashboard() {
   let inc = 0, exp = 0;
   txs.forEach(t => t.type === 'pemasukan' ? inc += t.amount : exp += t.amount);
 
-  document.querySelector('.balance-amount').textContent = fmtRp(inc - exp);
+  document.querySelector('.balance-amount').textContent = fmtRp(getSaldoAwal() + inc - exp);
   document.getElementById('total-masuk').textContent    = fmtRp(inc);
   document.getElementById('total-keluar').textContent   = fmtRp(exp);
 
-  const pct = inc > 0 ? Math.min(100, Math.round(Math.max(0, inc - exp) / inc * 100)) : 0;
+  // Update bulan
+  document.getElementById('balance-month-label').textContent =
+    new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+
+  const pct = (getSaldoAwal() + inc) > 0
+    ? Math.min(100, Math.round(Math.max(0, getSaldoAwal() + inc - exp) / (getSaldoAwal() + inc) * 100))
+    : 0;
   document.querySelector('.ring-pct').textContent = pct + '%';
   const offset = 201 - (201 * pct / 100);
   document.querySelectorAll('.ring-svg circle')[1].setAttribute('stroke-dashoffset', offset);
@@ -253,6 +253,35 @@ function initDashboard() {
   notifBtn.addEventListener('click', openNotif);
   notifClose.addEventListener('click', () => notifOverlay.classList.remove('open'));
   notifOverlay.addEventListener('click', e => { if (e.target === notifOverlay) notifOverlay.classList.remove('open'); });
+
+  /* ── Modal Saldo Awal ── */
+  const modalSaldo      = document.getElementById('modal-saldo');
+  const inputSaldoAwal  = document.getElementById('input-saldo-awal');
+  const btnSaveSaldo    = document.getElementById('btn-save-saldo');
+  const modalSaldoClose = document.getElementById('modal-saldo-close');
+  const balanceAmountEl = document.getElementById('balance-amount-val');
+
+  function openSaldoModal() {
+    inputSaldoAwal.value = getSaldoAwal() || '';
+    modalSaldo.classList.add('open');
+    setTimeout(() => inputSaldoAwal.focus(), 100);
+  }
+
+  balanceAmountEl.addEventListener('click', openSaldoModal);
+  modalSaldoClose.addEventListener('click', () => modalSaldo.classList.remove('open'));
+  modalSaldo.addEventListener('click', e => { if (e.target === modalSaldo) modalSaldo.classList.remove('open'); });
+
+  btnSaveSaldo.addEventListener('click', () => {
+    const val = parseFloat(inputSaldoAwal.value) || 0;
+    saveSaldoAwal(val);
+    modalSaldo.classList.remove('open');
+    // Refresh angka di dashboard
+    const allTxs = getTransactions();
+    let i2 = 0, e2 = 0;
+    allTxs.forEach(t => t.type === 'pemasukan' ? i2 += t.amount : e2 += t.amount);
+    balanceAmountEl.textContent = fmtRp(val + i2 - e2);
+    showToast('Saldo awal disimpan');
+  });
 }
 
 /* ════════════════════════════════════
