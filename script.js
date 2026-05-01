@@ -171,6 +171,66 @@ function initDashboard() {
         <svg style="width:16px;height:16px;stroke:#9191aa;fill:none;stroke-width:2;flex-shrink:0" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
       </div>`).join('');
   });
+
+  /* ── Notifikasi ── */
+  const notifOverlay = document.getElementById('notif-overlay');
+  const notifList    = document.getElementById('notif-list');
+  const notifBtn     = document.querySelector('.notif-btn');
+  const notifClose   = document.getElementById('notif-close');
+
+  function buildNotifs() {
+    const all = getTransactions();
+    const notifs = [];
+    const cm = new Date().toISOString().slice(0, 7);
+    const today = new Date().toISOString().split('T')[0];
+    const monthTxs = all.filter(t => t.date.startsWith(cm));
+    let mi = 0, me = 0;
+    monthTxs.forEach(t => t.type === 'pemasukan' ? mi += t.amount : me += t.amount);
+    const saldo = mi - me;
+
+    if (saldo < 500000 && saldo >= 0) {
+      notifs.push({ icon: '⚠️', bg: '#fff8e1', title: 'Saldo Hampir Habis', desc: `Saldo kamu tinggal ${fmtRp(saldo)}. Pertimbangkan mengurangi pengeluaran.`, time: 'Hari ini', unread: true });
+    }
+
+    const monthExp = monthTxs.filter(t => t.type === 'pengeluaran');
+    if (monthExp.length) {
+      const biggest = monthExp.reduce((a, b) => a.amount > b.amount ? a : b);
+      notifs.push({ icon: '💸', bg: '#fff0f2', title: 'Pengeluaran Terbesar', desc: `"${biggest.desc}" sebesar ${fmtRp(biggest.amount)} adalah pengeluaran terbesar bulan ini.`, time: 'Bulan ini', unread: false });
+    }
+
+    if (mi > 0) {
+      notifs.push({ icon: '💰', bg: '#f0fff8', title: 'Pemasukan Bulan Ini', desc: `Total pemasukan ${fmtRp(mi)}. Tetap semangat menabung!`, time: 'Bulan ini', unread: false });
+    }
+
+    const todayTx = all.filter(t => t.date === today);
+    if (todayTx.length === 0) {
+      notifs.push({ icon: '📝', bg: '#f5f5ff', title: 'Belum Ada Catatan Hari Ini', desc: 'Jangan lupa catat pengeluaran dan pemasukan hari ini ya!', time: 'Hari ini', unread: true });
+    } else if (todayTx.length >= 3) {
+      notifs.push({ icon: '📊', bg: '#f0f0ff', title: 'Aktif Hari Ini', desc: `Kamu sudah mencatat ${todayTx.length} transaksi hari ini. Bagus!`, time: 'Hari ini', unread: false });
+    }
+
+    return notifs;
+  }
+
+  function openNotif() {
+    const notifs = buildNotifs();
+    notifList.innerHTML = notifs.length
+      ? notifs.map(n => `
+          <div class="notif-item ${n.unread ? 'unread' : ''}">
+            <div class="notif-icon" style="background:${n.bg}">${n.icon}</div>
+            <div class="notif-body">
+              <p class="notif-title">${n.title}</p>
+              <p class="notif-desc">${n.desc}</p>
+              <p class="notif-time">${n.time}</p>
+            </div>
+          </div>`).join('')
+      : '<p class="notif-empty">Tidak ada notifikasi</p>';
+    notifOverlay.classList.add('open');
+  }
+
+  notifBtn.addEventListener('click', openNotif);
+  notifClose.addEventListener('click', () => notifOverlay.classList.remove('open'));
+  notifOverlay.addEventListener('click', e => { if (e.target === notifOverlay) notifOverlay.classList.remove('open'); });
 }
 
 /* ════════════════════════════════════
