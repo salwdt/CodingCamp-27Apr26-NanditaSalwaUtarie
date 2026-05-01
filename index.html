@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PinkPocket</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.cdnfonts.com/css/laries-script');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink:       #ffd8de;
+      --pink-dark:  #e8959c;
+      --pink-light: #ffd8de;
+      --text:       #2a2a3a;
+      --sub:        #888;
+      --border:     #ebebf0;
+      --white:      #ffffff;
+      --bg:         #fafafa;
+      --r:          14px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #d6d8e0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      gap: 36px;
+      flex-wrap: wrap;
+    }
+
+    /* ══════════════════════════════
+       iPhone 16 Frame
+    ══════════════════════════════ */
+    .iphone-frame {
+      position: relative;
+      width: 320px;
+      height: 693px;
+      background: #1c1c1e;
+      border-radius: 50px;
+      flex-shrink: 0;
+      box-shadow:
+        inset 0 0 0 1px #48484a,
+        inset 0 0 0 2.5px #1c1c1e,
+        0 50px 100px rgba(0,0,0,.6),
+        0 16px 36px rgba(0,0,0,.28);
+    }
+
+    /* Physical buttons */
+    .btn-action   { position: absolute; left: -3px; top: 108px; width: 3px; height: 30px; background: #48484a; border-radius: 2px 0 0 2px; }
+    .btn-vol-up   { position: absolute; left: -3px; top: 156px; width: 3px; height: 52px; background: #48484a; border-radius: 2px 0 0 2px; }
+    .btn-vol-down { position: absolute; left: -3px; top: 220px; width: 3px; height: 52px; background: #48484a; border-radius: 2px 0 0 2px; }
+    .btn-power    { position: absolute; right: -3px; top: 168px; width: 3px; height: 68px; background: #48484a; border-radius: 0 2px 2px 0; }
+
+    /* Screen */
+    .iphone-screen {
+      position: absolute;
+      inset: 7px;
+      border-radius: 43px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+    }
+
+    /* Dynamic Island */
+    .dynamic-island {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 104px;
+      height: 30px;
+      background: #000;
+      border-radius: 18px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 11px;
+    }
+    .di-dot {
+      width: 9px; height: 9px;
+      background: #111;
+      border-radius: 50%;
+      border: 1.5px solid #222;
+    }
+
+    /* Status bar */
+    .status-bar {
+      flex-shrink: 0;
+      height: 48px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 22px 7px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+      position: relative;
+      z-index: 5;
+    }
+    .sb-icons { display: flex; align-items: center; gap: 5px; }
+
+    /* Home bar */
+    .home-bar {
+      flex-shrink: 0;
+      height: 18px;
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .home-bar::after {
+      content: '';
+      width: 110px; height: 4px;
+      background: #1c1c1e;
+      border-radius: 99px;
+      opacity: .15;
+    }
+
+    /* ══════════════════════════════
+       Screen content
+    ══════════════════════════════ */
+    .screen-content {
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+    .screen-content::-webkit-scrollbar { display: none; }
+
+    /* Splash */
+    .screen-splash {
+      height: 100%;
+      background: var(--pink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 32px 24px;
+    }
+    .brand-logo {
+      font-family: 'Laries Script', 'Dancing Script', cursive;
+      font-size: 48px;
+      color: var(--white);
+      text-shadow: 0 2px 12px rgba(0,0,0,.12);
+      line-height: 1.1;
+      text-align: center;
+    }
+    .brand-tagline {
+      color: rgba(255,255,255,.8);
+      font-size: 12px;
+      letter-spacing: .5px;
+    }
+
+    /* Login / Register */
+    .screen-login,
+    .screen-register {
+      padding: 20px 24px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100%;
+    }
+    .screen-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .back-btn {
+      width: 28px; height: 28px;
+      border: none; background: none;
+      cursor: pointer;
+      color: var(--pink-dark);
+      font-size: 17px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      transition: background .2s;
+    }
+    .back-btn:hover { background: var(--pink-light); }
+
+    .screen-brand {
+      font-family: 'Laries Script', 'Dancing Script', cursive;
+      font-size: 28px;
+      color: var(--pink);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .screen-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 18px;
+    }
+
+    /* Form */
+    .form-group { margin-bottom: 12px; }
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: #fafafa;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .form-input::placeholder { color: var(--sub); }
+    .form-input:focus {
+      border-color: var(--pink);
+      box-shadow: 0 0 0 3px rgba(255,216,222,.2);
+      background: var(--white);
+    }
+
+    /* Primary button */
+    .btn-primary {
+      width: 100%;
+      padding: 13px;
+      background: var(--pink);
+      color: var(--white);
+      border: none;
+      border-radius: var(--r);
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: background .2s, transform .1s, box-shadow .2s;
+      box-shadow: 0 4px 16px rgba(255,216,222,.4);
+    }
+    .btn-primary:hover { background: var(--pink-dark); }
+    .btn-primary:active { transform: scale(.98); }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 16px 0;
+      color: var(--sub);
+      font-size: 11px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1;
+      height: 1px; background: var(--border);
+    }
+
+    /* Social buttons */
+    .social-row { display: flex; gap: 12px; justify-content: center; }
+    .btn-social {
+      width: 46px; height: 46px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--white);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .btn-social:hover {
+      border-color: var(--pink);
+      box-shadow: 0 2px 8px rgba(255,216,222,.3);
+    }
+
+    /* Footer link */
+    .footer-link {
+      text-align: center;
+      margin-top: 16px;
+      padding-top: 0;
+      font-size: 12px;
+      color: var(--sub);
+    }
+    .footer-link a {
+      color: var(--pink-dark);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .footer-link a:hover { text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 760px) {
+      body { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ PHONE 1: Splash ══ -->
+  <div class="iphone-frame">
+    <div class="btn-action"></div>
+    <div class="btn-vol-up"></div>
+    <div class="btn-vol-down"></div>
+    <div class="btn-power"></div>
+    <div class="iphone-screen">
+      <div class="dynamic-island"><div class="di-dot"></div></div>
+      <div class="screen-content">
+        <div class="screen-splash">
+          <div class="brand-logo">PinkPocket</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PHONE 2: Login ══ -->
+  <div class="iphone-frame">
+    <div class="btn-action"></div>
+    <div class="btn-vol-up"></div>
+    <div class="btn-vol-down"></div>
+    <div class="btn-power"></div>
+    <div class="iphone-screen">
+      <div class="dynamic-island"><div class="di-dot"></div></div>
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="sb-icons">
+          <svg width="15" height="11" viewBox="0 0 17 12"><rect x="0" y="5" width="3" height="7" rx="1" fill="currentColor" opacity=".35"/><rect x="4.5" y="3" width="3" height="9" rx="1" fill="currentColor" opacity=".6"/><rect x="9" y="1" width="3" height="11" rx="1" fill="currentColor" opacity=".8"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+          <svg width="15" height="11" viewBox="0 0 20 14"><path d="M10 3C6.5 3 3.4 4.5 1.2 7L0 5.7C2.6 2.8 6.1 1 10 1s7.4 1.8 10 4.7L18.8 7C16.6 4.5 13.5 3 10 3z" fill="currentColor"/><path d="M10 7c-2.2 0-4.2.9-5.6 2.4L3.2 8.1C5 6.2 7.4 5 10 5s5 1.2 6.8 3.1l-1.2 1.3C14.2 7.9 12.2 7 10 7z" fill="currentColor"/><circle cx="10" cy="13" r="1.5" fill="currentColor"/></svg>
+          <svg width="23" height="11" viewBox="0 0 25 12"><rect x="0" y="1" width="22" height="10" rx="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="1.5" y="2.5" width="16" height="7" rx="1.5" fill="currentColor"/><path d="M23 4.5v3a1.5 1.5 0 0 0 0-3z" fill="currentColor"/></svg>
+        </div>
+      </div>
+      <div class="screen-content">
+        <div class="screen-login">
+          <div class="screen-brand">PinkPocket</div>
+          <div class="screen-title">Login to your Account</div>
+          <div class="form-group">
+            <input class="form-input" type="email" placeholder="Email" />
+          </div>
+          <div class="form-group">
+            <input class="form-input" type="password" placeholder="Password" />
+          </div>
+          <button class="btn-primary">Sign in</button>
+          <div class="divider">- Or sign in with -</div>
+          <div class="social-row">
+            <button class="btn-social" title="Google">
+              <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            </button>
+            <button class="btn-social" title="Facebook">
+              <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#1877F2" d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+            </button>
+            <button class="btn-social" title="Twitter">
+              <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#1DA1F2" d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+            </button>
+          </div>
+          <div class="footer-link">
+            Don't have an account? <a href="#">Sign up</a>
+          </div>
+        </div>
+      </div>
+      <div class="home-bar"></div>
+    </div>
+  </div>
+
+  <!-- ══ PHONE 3: Register ══ -->
+  <div class="iphone-frame">
+    <div class="btn-action"></div>
+    <div class="btn-vol-up"></div>
+    <div class="btn-vol-down"></div>
+    <div class="btn-power"></div>
+    <div class="iphone-screen">
+      <div class="dynamic-island"><div class="di-dot"></div></div>
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="sb-icons">
+          <svg width="15" height="11" viewBox="0 0 17 12"><rect x="0" y="5" width="3" height="7" rx="1" fill="currentColor" opacity=".35"/><rect x="4.5" y="3" width="3" height="9" rx="1" fill="currentColor" opacity=".6"/><rect x="9" y="1" width="3" height="11" rx="1" fill="currentColor" opacity=".8"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+          <svg width="15" height="11" viewBox="0 0 20 14"><path d="M10 3C6.5 3 3.4 4.5 1.2 7L0 5.7C2.6 2.8 6.1 1 10 1s7.4 1.8 10 4.7L18.8 7C16.6 4.5 13.5 3 10 3z" fill="currentColor"/><path d="M10 7c-2.2 0-4.2.9-5.6 2.4L3.2 8.1C5 6.2 7.4 5 10 5s5 1.2 6.8 3.1l-1.2 1.3C14.2 7.9 12.2 7 10 7z" fill="currentColor"/><circle cx="10" cy="13" r="1.5" fill="currentColor"/></svg>
+          <svg width="23" height="11" viewBox="0 0 25 12"><rect x="0" y="1" width="22" height="10" rx="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="1.5" y="2.5" width="16" height="7" rx="1.5" fill="currentColor"/><path d="M23 4.5v3a1.5 1.5 0 0 0 0-3z" fill="currentColor"/></svg>
+        </div>
+      </div>
+      <div class="screen-content">
+        <div class="screen-register">
+          <div class="screen-header">
+            <button class="back-btn">←</button>
+          </div>
+          <div class="screen-brand">PinkPocket</div>
+          <div class="screen-title">Create your Account</div>
+          <div class="form-group">
+            <input class="form-input" type="text" placeholder="Full Name" />
+          </div>
+          <div class="form-group">
+            <input class="form-input" type="email" placeholder="Email" />
+          </div>
+          <div class="form-group">
+            <input class="form-input" type="password" placeholder="Password" />
+          </div>
+          <div class="form-group">
+            <input class="form-input" type="password" placeholder="Confirm Password" />
+          </div>
+          <button class="btn-primary">Sign up</button>
+          <div class="divider">- Or sign up with -</div>
+          <div class="social-row">
+            <button class="btn-social" title="Google">
+              <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            </button>
+            <button class="btn-social" title="Facebook">
+              <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#1877F2" d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+            </button>
+            <button class="btn-social" title="Twitter">
+              <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#1DA1F2" d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+            </button>
+          </div>
+          <div class="footer-link">
+            Already have an account? <a href="#">Sign in</a>
+          </div>
+        </div>
+      </div>
+      <div class="home-bar"></div>
+    </div>
+  </div>
+
+</body>
+</html>

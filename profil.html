@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil – PinkPocket</title>
+  <link rel="stylesheet" href="style.css?v=2" />
+</head>
+<body data-page="profil">
+
+<div class="iphone-frame">
+  <div class="btn-action"></div>
+  <div class="btn-vol-up"></div>
+  <div class="btn-vol-down"></div>
+  <div class="btn-power"></div>
+  <div class="iphone-screen">
+    <div class="dynamic-island"><div class="di-dot"></div></div>
+
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="sb-icons">
+        <svg width="15" height="11" viewBox="0 0 17 12"><rect x="0" y="5" width="3" height="7" rx="1" fill="currentColor" opacity=".35"/><rect x="4.5" y="3" width="3" height="9" rx="1" fill="currentColor" opacity=".6"/><rect x="9" y="1" width="3" height="11" rx="1" fill="currentColor" opacity=".8"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+        <svg width="15" height="11" viewBox="0 0 20 14"><path d="M10 3C6.5 3 3.4 4.5 1.2 7L0 5.7C2.6 2.8 6.1 1 10 1s7.4 1.8 10 4.7L18.8 7C16.6 4.5 13.5 3 10 3z" fill="currentColor"/><path d="M10 7c-2.2 0-4.2.9-5.6 2.4L3.2 8.1C5 6.2 7.4 5 10 5s5 1.2 6.8 3.1l-1.2 1.3C14.2 7.9 12.2 7 10 7z" fill="currentColor"/><circle cx="10" cy="13" r="1.5" fill="currentColor"/></svg>
+        <svg width="23" height="11" viewBox="0 0 25 12"><rect x="0" y="1" width="22" height="10" rx="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="1.5" y="2.5" width="16" height="7" rx="1.5" fill="currentColor"/><path d="M23 4.5v3a1.5 1.5 0 0 0 0-3z" fill="currentColor"/></svg>
+      </div>
+    </div>
+
+    <div class="app-scroll">
+
+      <!-- Profile Card -->
+      <div class="profile-card">
+        <div class="profile-avatar" id="avatar-initial">N</div>
+        <h3 class="profile-name" id="profile-name">Nandita</h3>
+        <p class="profile-email" id="profile-email">nandita@email.com</p>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-box">
+          <p class="stat-val" id="stat-tx">0</p>
+          <p class="stat-lbl">Transaksi</p>
+        </div>
+        <div class="stat-box">
+          <p class="stat-val" id="stat-masuk">Rp 0</p>
+          <p class="stat-lbl">Pemasukan</p>
+        </div>
+        <div class="stat-box">
+          <p class="stat-val" id="stat-keluar">Rp 0</p>
+          <p class="stat-lbl">Pengeluaran</p>
+        </div>
+      </div>
+
+      <!-- Menu -->
+      <div class="menu-list">
+        <div class="menu-item" id="menu-edit">
+          <div class="menu-icon" style="background:#ffd8de">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#e05c6e" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
+          <span>Edit Profil</span>
+          <span class="menu-arrow">›</span>
+        </div>
+        <div class="menu-item" id="menu-target">
+          <div class="menu-icon" style="background:#c8f0e0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#3dbf8e" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <span>Target Tabungan</span>
+          <span class="menu-arrow">›</span>
+        </div>
+        <div class="menu-item" id="menu-notif">
+          <div class="menu-icon" style="background:#e0deff">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#7b72e0" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <span>Notifikasi</span>
+          <span class="menu-arrow">›</span>
+        </div>
+        <div class="menu-item" id="menu-reset">
+          <div class="menu-icon" style="background:#ffddd6">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#e07050" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          </div>
+          <span class="reset-text">Reset Semua Data</span>
+          <span class="menu-arrow">›</span>
+        </div>
+      </div>
+
+      <!-- Edit Profil Modal -->
+      <div class="modal-overlay" id="modal-edit">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>Edit Profil</h3>
+            <button class="modal-close" id="close-edit">✕</button>
+          </div>
+          <div class="form-group">
+            <label>Nama</label>
+            <input type="text" id="edit-name" placeholder="Nama lengkap" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="edit-email" placeholder="Email" />
+          </div>
+          <button class="btn-save" id="btn-save-profil">Simpan</button>
+        </div>
+      </div>
+
+      <!-- Target Modal -->
+      <div class="modal-overlay" id="modal-target">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>Target Tabungan</h3>
+            <button class="modal-close" id="close-target">✕</button>
+          </div>
+          <div class="form-group">
+            <label>Target (Rp)</label>
+            <input type="number" id="input-target" placeholder="0" />
+          </div>
+          <p class="target-info" id="target-info"></p>
+          <button class="btn-save" id="btn-save-target">Simpan</button>
+        </div>
+      </div>
+
+      <div class="toast" id="toast"></div>
+
+    </div>
+
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </a>
+      <a href="statistik.html" class="nav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>Statistik</span>
+      </a>
+      <a href="tambah.html" class="nav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>Tambah</span>
+      </a>
+      <a href="dompet.html" class="nav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h.01"/></svg>
+        <span>Dompet</span>
+      </a>
+      <a href="profil.html" class="nav-btn active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profil</span>
+      </a>
+    </nav>
+    <div class="home-bar"></div>
+  </div>
+</div>
+
+<script src="script.js?v=2"></script>
+</body>
+</html>

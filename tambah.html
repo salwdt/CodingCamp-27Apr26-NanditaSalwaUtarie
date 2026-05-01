@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tambah – PinkPocket</title>
+  <link rel="stylesheet" href="style.css?v=2" />
+</head>
+<body data-page="tambah">
+
+<div class="iphone-frame">
+  <div class="btn-action"></div>
+  <div class="btn-vol-up"></div>
+  <div class="btn-vol-down"></div>
+  <div class="btn-power"></div>
+  <div class="iphone-screen">
+    <div class="dynamic-island"><div class="di-dot"></div></div>
+
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="sb-icons">
+        <svg width="15" height="11" viewBox="0 0 17 12"><rect x="0" y="5" width="3" height="7" rx="1" fill="currentColor" opacity=".35"/><rect x="4.5" y="3" width="3" height="9" rx="1" fill="currentColor" opacity=".6"/><rect x="9" y="1" width="3" height="11" rx="1" fill="currentColor" opacity=".8"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+        <svg width="15" height="11" viewBox="0 0 20 14"><path d="M10 3C6.5 3 3.4 4.5 1.2 7L0 5.7C2.6 2.8 6.1 1 10 1s7.4 1.8 10 4.7L18.8 7C16.6 4.5 13.5 3 10 3z" fill="currentColor"/><path d="M10 7c-2.2 0-4.2.9-5.6 2.4L3.2 8.1C5 6.2 7.4 5 10 5s5 1.2 6.8 3.1l-1.2 1.3C14.2 7.9 12.2 7 10 7z" fill="currentColor"/><circle cx="10" cy="13" r="1.5" fill="currentColor"/></svg>
+        <svg width="23" height="11" viewBox="0 0 25 12"><rect x="0" y="1" width="22" height="10" rx="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="1.5" y="2.5" width="16" height="7" rx="1.5" fill="currentColor"/><path d="M23 4.5v3a1.5 1.5 0 0 0 0-3z" fill="currentColor"/></svg>
+      </div>
+    </div>
+
+    <div class="app-scroll">
+
+      <header class="header">
+        <h2 class="page-title">Tambah Transaksi</h2>
+      </header>
+
+      <!-- Type Toggle -->
+      <div class="type-toggle">
+        <button class="type-btn active" data-type="pengeluaran">Pengeluaran</button>
+        <button class="type-btn" data-type="pemasukan">Pemasukan</button>
+      </div>
+
+      <!-- Amount Display -->
+      <div class="amount-display">
+        <span class="amount-prefix">Rp</span>
+        <span class="amount-value" id="amount-display">0</span>
+      </div>
+
+      <!-- Numpad -->
+      <div class="numpad">
+        <button class="num-btn" data-val="1">1</button>
+        <button class="num-btn" data-val="2">2</button>
+        <button class="num-btn" data-val="3">3</button>
+        <button class="num-btn" data-val="4">4</button>
+        <button class="num-btn" data-val="5">5</button>
+        <button class="num-btn" data-val="6">6</button>
+        <button class="num-btn" data-val="7">7</button>
+        <button class="num-btn" data-val="8">8</button>
+        <button class="num-btn" data-val="9">9</button>
+        <button class="num-btn" data-val="000">000</button>
+        <button class="num-btn" data-val="0">0</button>
+        <button class="num-btn del-btn" id="btn-del">⌫</button>
+      </div>
+
+      <!-- Form -->
+      <div class="form-section">
+        <div class="form-group">
+          <label>Keterangan</label>
+          <input type="text" id="tx-desc" placeholder="Contoh: Makan siang" />
+        </div>
+        <div class="form-group">
+          <label>Kategori</label>
+          <select id="tx-category">
+            <option value="Makanan">Makanan</option>
+            <option value="Transportasi">Transportasi</option>
+            <option value="Belanja">Belanja</option>
+            <option value="Hiburan">Hiburan</option>
+            <option value="Kesehatan">Kesehatan</option>
+            <option value="Tagihan">Tagihan</option>
+            <option value="Gaji">Gaji</option>
+            <option value="Investasi">Investasi</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tanggal</label>
+          <input type="date" id="tx-date" />
+        </div>
+        <button class="btn-save" id="btn-save">Simpan Transaksi</button>
+      </div>
+
+      <div class="toast" id="toast"></div>
+
+    </div>
+
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </a>
+      <a href="statistik.html" class="nav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>Statistik</span>
+      </a>
+      <a href="tambah.html" class="nav-btn active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>Tambah</span>
+      </a>
+      <a href="dompet.html" class="nav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h.01"/></svg>
+        <span>Dompet</span>
+      </a>
+      <a href="profil.html" class="nav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profil</span>
+      </a>
+    </nav>
+    <div class="home-bar"></div>
+  </div>
+</div>
+
+<script src="script.js?v=2"></script>
+</body>
+</html>
