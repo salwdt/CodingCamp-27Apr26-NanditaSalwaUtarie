@@ -124,7 +124,7 @@ function initDashboard() {
   let inc = 0, exp = 0;
   txs.forEach(t => t.type === 'pemasukan' ? inc += t.amount : exp += t.amount);
 
-  document.querySelector('.balance-amount').textContent = fmtRp(getSaldoAwal() + inc - exp);
+  document.querySelector('.balance-amount').textContent = fmtRp(inc - exp);
   document.getElementById('total-masuk').textContent    = fmtRp(inc);
   document.getElementById('total-keluar').textContent   = fmtRp(exp);
 
@@ -143,7 +143,7 @@ function initDashboard() {
   renderTxList('tx-list', recent);
 
   // Update mini cards
-  const saldo = getSaldoAwal() + inc - exp;
+  const saldo = inc - exp;
   document.getElementById('mc-tabungan').textContent  = fmtRp(Math.max(0, saldo));
   document.getElementById('mc-investasi').textContent = fmtRp(txs.filter(t => t.cat === 'Investasi' && t.type === 'pemasukan').reduce((a, t) => a + t.amount, 0));
   document.getElementById('mc-tagihan').textContent   = txs.filter(t => t.cat === 'Tagihan').length + ' tagihan';
@@ -313,13 +313,31 @@ function initDashboard() {
 
   btnSaveSaldo.addEventListener('click', () => {
     const val = parseFloat(inputSaldoAwal.value) || 0;
+    if (val < 0) { showToast('Saldo tidak boleh negatif'); return; }
+
+    // Hapus transaksi saldo awal lama jika ada
+    const existing = getTransactions().filter(t => t.cat !== 'Saldo Awal');
+
+    // Tambah sebagai transaksi pemasukan supaya muncul di Dompet
+    if (val > 0) {
+      existing.unshift({
+        id: 'saldo-awal',
+        type: 'pemasukan',
+        cat: 'Saldo Awal',
+        desc: 'Saldo Awal',
+        amount: val,
+        date: new Date().toISOString().split('T')[0],
+      });
+    }
+    saveTransactions(existing);
     saveSaldoAwal(val);
     modalSaldo.classList.remove('open');
+
     // Refresh angka di dashboard
-    const allTxs = getTransactions();
     let i2 = 0, e2 = 0;
-    allTxs.forEach(t => t.type === 'pemasukan' ? i2 += t.amount : e2 += t.amount);
-    balanceAmountEl.textContent = fmtRp(val + i2 - e2);
+    existing.forEach(t => t.type === 'pemasukan' ? i2 += t.amount : e2 += t.amount);
+    balanceAmountEl.textContent = fmtRp(i2 - e2);
+    refreshCards();
     showToast('Saldo awal disimpan');
   });
 
@@ -335,7 +353,7 @@ function initDashboard() {
     const all = getTransactions();
     let i3 = 0, e3 = 0;
     all.forEach(t => t.type === 'pemasukan' ? i3 += t.amount : e3 += t.amount);
-    const s = getSaldoAwal() + i3 - e3;
+    const s = i3 - e3;
     balanceAmountEl.textContent = fmtRp(s);
     document.getElementById('total-masuk').textContent  = fmtRp(i3);
     document.getElementById('total-keluar').textContent = fmtRp(e3);
@@ -595,8 +613,7 @@ function initDompet() {
     const txs = getTransactions();
     let inc = 0, exp = 0;
     txs.forEach(t => t.type === 'pemasukan' ? inc += t.amount : exp += t.amount);
-    document.getElementById('saldo-total').textContent = fmtRp(inc - exp);
-    document.getElementById('saldo-bulan').textContent = new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+    document.getElementById('saldo-total').textContent = fmtRp(inc - exp);    document.getElementById('saldo-bulan').textContent = new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
     let filtered = [...txs].sort((a, b) => b.date.localeCompare(a.date));
     if (currentFilter !== 'semua') filtered = filtered.filter(t => t.type === currentFilter);
     renderTxListDeletable('tx-list', filtered, (id) => {
