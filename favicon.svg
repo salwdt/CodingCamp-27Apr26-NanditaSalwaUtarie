@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Wallet body -->
+  <rect x="8" y="38" width="84" height="54" rx="10" fill="#f4a7b9"/>
+  <!-- Wallet top flap -->
+  <rect x="8" y="32" width="84" height="14" rx="4" fill="#f4a7b9"/>
+  <!-- Slot line on flap -->
+  <rect x="18" y="37" width="50" height="3" rx="1.5" fill="white" opacity="0.6"/>
+  <!-- Clasp tab -->
+  <rect x="76" y="68" width="18" height="14" rx="5" fill="#f4a7b9" stroke="white" stroke-width="2.5"/>
+  <circle cx="85" cy="75" r="3.5" fill="white"/>
+  <!-- Banknote sticking out -->
+  <g transform="rotate(-15, 50, 30)">
+    <rect x="28" y="4" width="44" height="32" rx="4" fill="#f4a7b9"/>
+    <rect x="28" y="4" width="44" height="32" rx="4" fill="none" stroke="white" stroke-width="2.5"/>
+    <circle cx="50" cy="20" r="6" fill="white" opacity="0.5"/>
+  </g>
+</svg>
