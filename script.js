@@ -110,6 +110,14 @@ function initDashboard() {
   const recent = [...txs].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
   renderTxList('tx-list', recent);
 
+  // Update mini cards
+  const saldo = getSaldoAwal() + inc - exp;
+  document.getElementById('mc-tabungan').textContent  = fmtRp(Math.max(0, saldo));
+  document.getElementById('mc-investasi').textContent = fmtRp(txs.filter(t => t.cat === 'Investasi' && t.type === 'pemasukan').reduce((a, t) => a + t.amount, 0));
+  document.getElementById('mc-tagihan').textContent   = txs.filter(t => t.cat === 'Tagihan').length + ' tagihan';
+  const totalExp = exp > 0 ? Math.round(exp / (inc + getSaldoAwal() || 1) * 100) : 0;
+  document.getElementById('mc-anggaran').textContent  = Math.min(100, totalExp) + '% terpakai';
+
   /* ── Search fitur ── */
   const FEATURES = [
     { name: 'Dashboard',        desc: 'Halaman utama & ringkasan keuangan',   url: 'dashboard.html' },
