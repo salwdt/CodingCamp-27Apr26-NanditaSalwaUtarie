@@ -114,7 +114,7 @@
           </div>
           <p class="mc-sub">Tumbuh terus</p>
           <p class="mc-value" id="mc-tabungan">Rp 0</p>
-          <button class="mc-btn">Cek →</button>
+          <button class="mc-btn" id="cek-tabungan">Cek →</button>
         </div>
         <div class="mini-card card-lavender">
           <div class="mc-header">
@@ -123,7 +123,7 @@
           </div>
           <p class="mc-sub">Kontrol pengeluaran</p>
           <p class="mc-value" id="mc-anggaran">0% terpakai</p>
-          <button class="mc-btn">Cek →</button>
+          <button class="mc-btn" id="cek-anggaran">Cek →</button>
         </div>
       </div>
       <div class="mini-cards">
@@ -134,7 +134,7 @@
           </div>
           <p class="mc-sub">Portofolio aktif</p>
           <p class="mc-value" id="mc-investasi">Rp 0</p>
-          <button class="mc-btn">Cek →</button>
+          <button class="mc-btn" id="cek-investasi">Cek →</button>
         </div>
         <div class="mini-card card-coral">
           <div class="mc-header">
@@ -143,7 +143,7 @@
           </div>
           <p class="mc-sub">Jatuh tempo segera</p>
           <p class="mc-value" id="mc-tagihan">0 tagihan</p>
-          <button class="mc-btn">Cek →</button>
+          <button class="mc-btn" id="cek-tagihan">Cek →</button>
         </div>
       </div>
 
@@ -199,6 +199,85 @@
       <input type="number" id="input-saldo-awal" placeholder="0" min="0" />
     </div>
     <button class="btn-save" id="btn-save-saldo">Simpan</button>
+  </div>
+</div>
+
+<!-- ══ MODAL TABUNGAN ══ -->
+<div class="modal-overlay" id="modal-tabungan">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Tabungan</h3>
+      <button class="modal-close" data-modal="modal-tabungan">✕</button>
+    </div>
+    <p class="modal-info" id="info-tabungan"></p>
+    <div class="form-group">
+      <label>Tambah Tabungan (Rp)</label>
+      <input type="number" id="input-tabungan" placeholder="0" min="0" />
+    </div>
+    <div class="form-group">
+      <label>Keterangan</label>
+      <input type="text" id="desc-tabungan" placeholder="Contoh: Nabung bulan ini" />
+    </div>
+    <button class="btn-save" id="btn-save-tabungan">Simpan</button>
+  </div>
+</div>
+
+<!-- ══ MODAL ANGGARAN ══ -->
+<div class="modal-overlay" id="modal-anggaran">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Anggaran Bulanan</h3>
+      <button class="modal-close" data-modal="modal-anggaran">✕</button>
+    </div>
+    <p class="modal-info" id="info-anggaran"></p>
+    <div class="form-group">
+      <label>Batas Anggaran Bulanan (Rp)</label>
+      <input type="number" id="input-anggaran" placeholder="0" min="0" />
+    </div>
+    <div class="anggaran-bar-wrap" id="anggaran-bar-wrap" style="display:none">
+      <div class="anggaran-bar-fill" id="anggaran-bar-fill"></div>
+    </div>
+    <button class="btn-save" id="btn-save-anggaran">Simpan</button>
+  </div>
+</div>
+
+<!-- ══ MODAL INVESTASI ══ -->
+<div class="modal-overlay" id="modal-investasi">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Investasi</h3>
+      <button class="modal-close" data-modal="modal-investasi">✕</button>
+    </div>
+    <p class="modal-info" id="info-investasi"></p>
+    <div class="form-group">
+      <label>Tambah Investasi (Rp)</label>
+      <input type="number" id="input-investasi" placeholder="0" min="0" />
+    </div>
+    <div class="form-group">
+      <label>Keterangan</label>
+      <input type="text" id="desc-investasi" placeholder="Contoh: Beli saham BBCA" />
+    </div>
+    <button class="btn-save" id="btn-save-investasi">Simpan</button>
+  </div>
+</div>
+
+<!-- ══ MODAL TAGIHAN ══ -->
+<div class="modal-overlay" id="modal-tagihan">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Tagihan</h3>
+      <button class="modal-close" data-modal="modal-tagihan">✕</button>
+    </div>
+    <p class="modal-info" id="info-tagihan"></p>
+    <div class="form-group">
+      <label>Nama Tagihan</label>
+      <input type="text" id="input-tagihan-nama" placeholder="Contoh: Listrik, Internet" />
+    </div>
+    <div class="form-group">
+      <label>Jumlah (Rp)</label>
+      <input type="number" id="input-tagihan-jumlah" placeholder="0" min="0" />
+    </div>
+    <button class="btn-save" id="btn-save-tagihan">Simpan</button>
   </div>
 </div>
 

@@ -290,6 +290,118 @@ function initDashboard() {
     balanceAmountEl.textContent = fmtRp(val + i2 - e2);
     showToast('Saldo awal disimpan');
   });
+
+  /* ── Close semua modal via data-modal ── */
+  document.querySelectorAll('.modal-close[data-modal]').forEach(btn => {
+    btn.addEventListener('click', () => document.getElementById(btn.dataset.modal).classList.remove('open'));
+  });
+  document.querySelectorAll('.modal-overlay').forEach(o => {
+    o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+  });
+
+  function refreshCards() {
+    const all = getTransactions();
+    let i3 = 0, e3 = 0;
+    all.forEach(t => t.type === 'pemasukan' ? i3 += t.amount : e3 += t.amount);
+    const s = getSaldoAwal() + i3 - e3;
+    balanceAmountEl.textContent = fmtRp(s);
+    document.getElementById('total-masuk').textContent  = fmtRp(i3);
+    document.getElementById('total-keluar').textContent = fmtRp(e3);
+    document.getElementById('mc-tabungan').textContent  = fmtRp(Math.max(0, s));
+    document.getElementById('mc-investasi').textContent = fmtRp(all.filter(t => t.cat === 'Investasi' && t.type === 'pemasukan').reduce((a, t) => a + t.amount, 0));
+    document.getElementById('mc-tagihan').textContent   = all.filter(t => t.cat === 'Tagihan').length + ' tagihan';
+    const anggaran = parseFloat(localStorage.getItem('pk_anggaran')) || 0;
+    const pctAng = anggaran > 0 ? Math.min(100, Math.round(e3 / anggaran * 100)) : 0;
+    document.getElementById('mc-anggaran').textContent  = pctAng + '% terpakai';
+    const recent = [...all].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
+    renderTxList('tx-list', recent);
+  }
+
+  /* ── Tabungan ── */
+  document.getElementById('cek-tabungan').addEventListener('click', () => {
+    const all = getTransactions();
+    let i = 0, e = 0; all.forEach(t => t.type === 'pemasukan' ? i += t.amount : e += t.amount);
+    document.getElementById('info-tabungan').textContent = `Saldo saat ini: ${fmtRp(getSaldoAwal() + i - e)}`;
+    document.getElementById('modal-tabungan').classList.add('open');
+  });
+  document.getElementById('btn-save-tabungan').addEventListener('click', () => {
+    const amount = parseFloat(document.getElementById('input-tabungan').value) || 0;
+    const desc   = document.getElementById('desc-tabungan').value.trim() || 'Tabungan';
+    if (amount <= 0) { showToast('Masukkan jumlah yang valid'); return; }
+    const txs = getTransactions();
+    txs.push({ id: Date.now(), type: 'pemasukan', cat: 'Lainnya', desc, amount, date: new Date().toISOString().split('T')[0] });
+    saveTransactions(txs);
+    document.getElementById('modal-tabungan').classList.remove('open');
+    document.getElementById('input-tabungan').value = '';
+    document.getElementById('desc-tabungan').value = '';
+    refreshCards(); showToast('Tabungan ditambahkan');
+  });
+
+  /* ── Anggaran ── */
+  document.getElementById('cek-anggaran').addEventListener('click', () => {
+    const anggaran = parseFloat(localStorage.getItem('pk_anggaran')) || 0;
+    const all = getTransactions(); let e = 0;
+    all.forEach(t => t.type === 'pengeluaran' ? e += t.amount : null);
+    const pct = anggaran > 0 ? Math.min(100, Math.round(e / anggaran * 100)) : 0;
+    document.getElementById('info-anggaran').textContent = anggaran > 0
+      ? `Pengeluaran: ${fmtRp(e)} dari batas ${fmtRp(anggaran)} (${pct}%)`
+      : 'Belum ada batas anggaran. Set sekarang.';
+    document.getElementById('input-anggaran').value = anggaran || '';
+    const wrap = document.getElementById('anggaran-bar-wrap');
+    const fill = document.getElementById('anggaran-bar-fill');
+    if (anggaran > 0) {
+      wrap.style.display = 'block';
+      fill.style.width = pct + '%';
+      fill.className = 'anggaran-bar-fill' + (pct >= 100 ? ' over' : pct >= 80 ? ' warn' : '');
+    } else { wrap.style.display = 'none'; }
+    document.getElementById('modal-anggaran').classList.add('open');
+  });
+  document.getElementById('btn-save-anggaran').addEventListener('click', () => {
+    const val = parseFloat(document.getElementById('input-anggaran').value) || 0;
+    if (val <= 0) { showToast('Masukkan batas anggaran yang valid'); return; }
+    localStorage.setItem('pk_anggaran', val);
+    document.getElementById('modal-anggaran').classList.remove('open');
+    refreshCards(); showToast('Anggaran disimpan');
+  });
+
+  /* ── Investasi ── */
+  document.getElementById('cek-investasi').addEventListener('click', () => {
+    const total = getTransactions().filter(t => t.cat === 'Investasi' && t.type === 'pemasukan').reduce((a, t) => a + t.amount, 0);
+    document.getElementById('info-investasi').textContent = `Total investasi: ${fmtRp(total)}`;
+    document.getElementById('modal-investasi').classList.add('open');
+  });
+  document.getElementById('btn-save-investasi').addEventListener('click', () => {
+    const amount = parseFloat(document.getElementById('input-investasi').value) || 0;
+    const desc   = document.getElementById('desc-investasi').value.trim() || 'Investasi';
+    if (amount <= 0) { showToast('Masukkan jumlah yang valid'); return; }
+    const txs = getTransactions();
+    txs.push({ id: Date.now(), type: 'pemasukan', cat: 'Investasi', desc, amount, date: new Date().toISOString().split('T')[0] });
+    saveTransactions(txs);
+    document.getElementById('modal-investasi').classList.remove('open');
+    document.getElementById('input-investasi').value = '';
+    document.getElementById('desc-investasi').value = '';
+    refreshCards(); showToast('Investasi ditambahkan');
+  });
+
+  /* ── Tagihan ── */
+  document.getElementById('cek-tagihan').addEventListener('click', () => {
+    const count = getTransactions().filter(t => t.cat === 'Tagihan').length;
+    document.getElementById('info-tagihan').textContent = `Total tagihan tercatat: ${count} transaksi`;
+    document.getElementById('modal-tagihan').classList.add('open');
+  });
+  document.getElementById('btn-save-tagihan').addEventListener('click', () => {
+    const nama   = document.getElementById('input-tagihan-nama').value.trim();
+    const amount = parseFloat(document.getElementById('input-tagihan-jumlah').value) || 0;
+    if (!nama)        { showToast('Masukkan nama tagihan'); return; }
+    if (amount <= 0)  { showToast('Masukkan jumlah yang valid'); return; }
+    const txs = getTransactions();
+    txs.push({ id: Date.now(), type: 'pengeluaran', cat: 'Tagihan', desc: nama, amount, date: new Date().toISOString().split('T')[0] });
+    saveTransactions(txs);
+    document.getElementById('modal-tagihan').classList.remove('open');
+    document.getElementById('input-tagihan-nama').value = '';
+    document.getElementById('input-tagihan-jumlah').value = '';
+    refreshCards(); showToast('Tagihan ditambahkan');
+  });
 }
 
 /* ════════════════════════════════════

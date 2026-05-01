@@ -141,7 +141,7 @@ html, body {
   align-items: center; gap: 3px;
   background: none; border: none;
   cursor: pointer; text-decoration: none;
-  color: #ffd8de;
+  color: #c9a0a8;
   font-size: 9px; font-weight: 600;
   padding: 5px 8px;
   border-radius: 12px;
@@ -149,7 +149,7 @@ html, body {
   flex: 1;
   font-family: inherit;
 }
-.nav-btn svg { width: 20px; height: 20px; stroke: #ffd8de; }
+.nav-btn svg { width: 20px; height: 20px; stroke: #c9a0a8; }
 .nav-btn.active { color: #e05c6e; background: rgba(255,216,222,.4); }
 .nav-btn.active svg { stroke: #e05c6e; }
 
@@ -596,3 +596,21 @@ mark {
   border-radius: 50%;
   border: 2px solid var(--white);
 }
+
+/* ══ Modal info text ══ */
+.modal-info {
+  font-size: 13px; color: var(--sub);
+  margin-bottom: 14px; line-height: 1.5;
+}
+.anggaran-bar-wrap {
+  height: 8px; background: #eee;
+  border-radius: 99px; overflow: hidden;
+  margin-bottom: 14px;
+}
+.anggaran-bar-fill {
+  height: 100%; border-radius: 99px;
+  background: var(--mint-d);
+  transition: width .4s ease;
+}
+.anggaran-bar-fill.warn { background: #f5a623; }
+.anggaran-bar-fill.over { background: var(--pink-d); }
