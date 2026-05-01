@@ -1,5 +1,5 @@
 /* ============================================================
-   PinkPocket – script.js (satu file untuk semua halaman)
+   PinkPocket – script.js
    ============================================================ */
 
 'use strict';
@@ -15,7 +15,8 @@ function getTransactions() {
 }
 function saveTransactions(txs) { localStorage.setItem(STORAGE_KEY, JSON.stringify(txs)); }
 function getProfile() {
-  try { return JSON.parse(localStorage.getItem(PROFILE_KEY)) || { name: 'Nandita', email: 'nandita@email.com' }; } catch { return { name: 'Nandita', email: 'nandita@email.com' }; }
+  try { return JSON.parse(localStorage.getItem(PROFILE_KEY)) || { name: 'Nandita', email: 'nandita@email.com' }; }
+  catch { return { name: 'Nandita', email: 'nandita@email.com' }; }
 }
 function saveProfile(p) { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); }
 function getTarget() { return parseFloat(localStorage.getItem(TARGET_KEY)) || 0; }
@@ -57,7 +58,7 @@ function renderTxList(containerId, txList) {
     const cls  = t.type === 'pemasukan' ? 'inc' : 'exp';
     const icon = ICONS[t.cat] || ICONS['Lainnya'];
     const dateLabel = new Date(t.date + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
-    return `<div class="tx-item" style="animation-delay:${i*.04}s">
+    return `<div class="tx-item" style="animation-delay:${i * .04}s">
       <div class="tx-icon">${icon}</div>
       <div class="tx-info">
         <p class="tx-desc">${t.desc}</p>
@@ -75,16 +76,16 @@ function seedIfEmpty() {
   localStorage.setItem(SEED_VER, '1');
   const cm = new Date().toISOString().slice(0, 7);
   saveTransactions([
-    { id: 1,  type: 'pemasukan',   cat: 'Gaji',         desc: 'Gaji Bulanan',      amount: 8500000, date: `${cm}-01` },
-    { id: 2,  type: 'pemasukan',   cat: 'Investasi',     desc: 'Dividen Saham',     amount: 1200000, date: `${cm}-03` },
-    { id: 3,  type: 'pengeluaran', cat: 'Makanan',       desc: 'Makan Siang',       amount: 85000,   date: `${cm}-04` },
-    { id: 4,  type: 'pengeluaran', cat: 'Tagihan',       desc: 'Tagihan Listrik',   amount: 210000,  date: `${cm}-06` },
-    { id: 5,  type: 'pengeluaran', cat: 'Belanja',       desc: 'Belanja Online',    amount: 350000,  date: `${cm}-07` },
-    { id: 6,  type: 'pemasukan',   cat: 'Lainnya',       desc: 'Freelance',         amount: 500000,  date: `${cm}-08` },
-    { id: 7,  type: 'pengeluaran', cat: 'Hiburan',       desc: 'Langganan Netflix', amount: 54000,   date: `${cm}-09` },
-    { id: 8,  type: 'pengeluaran', cat: 'Makanan',       desc: 'Makan Malam',       amount: 65000,   date: `${cm}-10` },
-    { id: 9,  type: 'pemasukan',   cat: 'Gaji',          desc: 'Gaji Bulanan',      amount: 8500000, date: `${cm}-11` },
-    { id: 10, type: 'pengeluaran', cat: 'Transportasi',  desc: 'Bensin',            amount: 120000,  date: `${cm}-12` },
+    { id: 1,  type: 'pemasukan',   cat: 'Gaji',        desc: 'Gaji Bulanan',      amount: 8500000, date: `${cm}-01` },
+    { id: 2,  type: 'pemasukan',   cat: 'Investasi',   desc: 'Dividen Saham',     amount: 1200000, date: `${cm}-03` },
+    { id: 3,  type: 'pengeluaran', cat: 'Makanan',     desc: 'Makan Siang',       amount: 85000,   date: `${cm}-04` },
+    { id: 4,  type: 'pengeluaran', cat: 'Tagihan',     desc: 'Tagihan Listrik',   amount: 210000,  date: `${cm}-06` },
+    { id: 5,  type: 'pengeluaran', cat: 'Belanja',     desc: 'Belanja Online',    amount: 350000,  date: `${cm}-07` },
+    { id: 6,  type: 'pemasukan',   cat: 'Lainnya',     desc: 'Freelance',         amount: 500000,  date: `${cm}-08` },
+    { id: 7,  type: 'pengeluaran', cat: 'Hiburan',     desc: 'Langganan Netflix', amount: 54000,   date: `${cm}-09` },
+    { id: 8,  type: 'pengeluaran', cat: 'Makanan',     desc: 'Makan Malam',       amount: 65000,   date: `${cm}-10` },
+    { id: 9,  type: 'pemasukan',   cat: 'Gaji',        desc: 'Gaji Bulanan',      amount: 8500000, date: `${cm}-11` },
+    { id: 10, type: 'pengeluaran', cat: 'Transportasi',desc: 'Bensin',            amount: 120000,  date: `${cm}-12` },
   ]);
 }
 
@@ -97,9 +98,9 @@ function initDashboard() {
   let inc = 0, exp = 0;
   txs.forEach(t => t.type === 'pemasukan' ? inc += t.amount : exp += t.amount);
 
-  document.querySelector('.balance-amount').textContent       = fmtRp(inc - exp);
-  document.getElementById('total-masuk').textContent          = fmtRp(inc);
-  document.getElementById('total-keluar').textContent         = fmtRp(exp);
+  document.querySelector('.balance-amount').textContent = fmtRp(inc - exp);
+  document.getElementById('total-masuk').textContent    = fmtRp(inc);
+  document.getElementById('total-keluar').textContent   = fmtRp(exp);
 
   const pct = inc > 0 ? Math.min(100, Math.round(Math.max(0, inc - exp) / inc * 100)) : 0;
   document.querySelector('.ring-pct').textContent = pct + '%';
@@ -109,7 +110,18 @@ function initDashboard() {
   const recent = [...txs].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
   renderTxList('tx-list', recent);
 
-  // ── Search ──
+  /* ── Search fitur ── */
+  const FEATURES = [
+    { name: 'Dashboard',        desc: 'Halaman utama & ringkasan keuangan',   url: 'dashboard.html' },
+    { name: 'Statistik',        desc: 'Grafik pemasukan & pengeluaran',        url: 'statistik.html' },
+    { name: 'Tambah Transaksi', desc: 'Catat pemasukan atau pengeluaran baru', url: 'tambah.html'    },
+    { name: 'Dompet',           desc: 'Riwayat semua transaksi',               url: 'dompet.html'    },
+    { name: 'Profil',           desc: 'Edit profil & target tabungan',         url: 'profil.html'    },
+    { name: 'Pemasukan',        desc: 'Lihat semua transaksi pemasukan',       url: 'dompet.html'    },
+    { name: 'Pengeluaran',      desc: 'Lihat semua transaksi pengeluaran',     url: 'dompet.html'    },
+    { name: 'Target Tabungan',  desc: 'Set target tabungan bulanan',           url: 'profil.html'    },
+  ];
+
   const overlay   = document.getElementById('search-overlay');
   const input     = document.getElementById('search-input');
   const results   = document.getElementById('search-results');
@@ -123,7 +135,7 @@ function initDashboard() {
   function closeSearch() {
     overlay.classList.remove('open');
     input.value = '';
-    results.innerHTML = '<p class="search-hint">Ketik untuk mencari transaksi</p>';
+    results.innerHTML = '<p class="search-hint">Ketik nama fitur yang ingin dibuka</p>';
   }
 
   btnSearch.addEventListener('click', openSearch);
@@ -134,38 +146,33 @@ function initDashboard() {
   input.addEventListener('input', () => {
     const q = input.value.trim().toLowerCase();
     if (!q) {
-      results.innerHTML = '<p class="search-hint">Ketik untuk mencari transaksi</p>';
+      results.innerHTML = '<p class="search-hint">Ketik nama fitur yang ingin dibuka</p>';
       return;
     }
-    const found = getTransactions().filter(t =>
-      t.desc.toLowerCase().includes(q) ||
-      t.cat.toLowerCase().includes(q) ||
-      fmtRp(t.amount).toLowerCase().includes(q)
-    ).sort((a, b) => b.date.localeCompare(a.date));
-
+    const found = FEATURES.filter(f =>
+      f.name.toLowerCase().includes(q) ||
+      f.desc.toLowerCase().includes(q)
+    );
     if (!found.length) {
-      results.innerHTML = '<p class="search-empty">Tidak ada transaksi ditemukan</p>';
+      results.innerHTML = '<p class="search-empty">Fitur tidak ditemukan</p>';
       return;
     }
-    const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    // highlight matching text
+    const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+    const re = new RegExp('(' + escaped + ')', 'gi');
     const hl = str => str.replace(re, '<mark>$1</mark>');
 
-    results.innerHTML = found.map(t => {
-      const sign = t.type === 'pemasukan' ? '+' : '-';
-      const cls  = t.type === 'pemasukan' ? 'inc' : 'exp';
-      const icon = ICONS[t.cat] || ICONS['Lainnya'];
-      const dateLabel = new Date(t.date + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-      return `<div class="search-item">
-        <div class="tx-icon">${icon}</div>
+    results.innerHTML = found.map(f => `
+      <div class="search-item" onclick="location.href='${f.url}'" style="cursor:pointer">
         <div class="search-item-info">
-          <p class="search-item-desc">${hl(t.desc)}</p>
-          <p class="search-item-meta">${hl(t.cat)} · ${dateLabel}</p>
+          <p class="search-item-desc">${hl(f.name)}</p>
+          <p class="search-item-meta">${hl(f.desc)}</p>
         </div>
-        <span class="search-item-amount ${cls}">${sign}${fmtRp(t.amount)}</span>
-      </div>`;
-    }).join('');
+        <svg style="width:16px;height:16px;stroke:#9191aa;fill:none;stroke-width:2;flex-shrink:0" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>`).join('');
   });
 }
+
 /* ════════════════════════════════════
    STATISTIK
 ════════════════════════════════════ */
@@ -174,7 +181,6 @@ let barChart = null, donutChart = null;
 function initStatistik() {
   seedIfEmpty();
   renderStatistik('minggu');
-
   document.querySelectorAll('.pill').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
@@ -194,7 +200,6 @@ function renderStatistik(period) {
   document.getElementById('sum-masuk').textContent  = fmtRp(inc);
   document.getElementById('sum-keluar').textContent = fmtRp(exp);
 
-  // Bar chart
   let labels = [], incArr = [], expArr = [];
   if (period === 'minggu') {
     for (let i = 6; i >= 0; i--) {
@@ -235,7 +240,6 @@ function renderStatistik(period) {
     options: { responsive: true, plugins: { legend: { position: 'top', labels: { font: { size: 10 }, boxWidth: 10 } }, tooltip: { callbacks: { label: c => ' ' + fmtRp(c.parsed.y) } } }, scales: { y: { beginAtZero: true, ticks: { callback: v => v >= 1e6 ? (v/1e6).toFixed(1)+'jt' : v >= 1e3 ? (v/1e3)+'rb' : v, font: { size: 9 } }, grid: { color: '#f0f0f8' } }, x: { ticks: { font: { size: 10 } }, grid: { display: false } } } },
   });
 
-  // Donut
   const catMap = {};
   monthTxs.filter(t => t.type === 'pengeluaran').forEach(t => { catMap[t.cat] = (catMap[t.cat] || 0) + t.amount; });
   const catLabels = Object.keys(catMap), catData = Object.values(catMap);
@@ -255,15 +259,14 @@ function renderStatistik(period) {
       <div class="legend-item">
         <span class="legend-dot" style="background:${COLORS[i]}"></span>
         <span class="legend-name">${l}</span>
-        <span class="legend-pct">${total > 0 ? Math.round(catData[i]/total*100) : 0}%</span>
+        <span class="legend-pct">${total > 0 ? Math.round(catData[i] / total * 100) : 0}%</span>
       </div>`).join('');
   }
 
-  // Summary
   document.getElementById('summary-list').innerHTML = [
     { label: 'Pemasukan',   val: fmtRp(inc),       color: '#3dbf8e' },
-    { label: 'Pengeluaran', val: fmtRp(exp),       color: '#e05c6e' },
-    { label: 'Saldo',       val: fmtRp(inc - exp), color: inc >= exp ? '#3dbf8e' : '#e05c6e' },
+    { label: 'Pengeluaran', val: fmtRp(exp),        color: '#e05c6e' },
+    { label: 'Saldo',       val: fmtRp(inc - exp),  color: inc >= exp ? '#3dbf8e' : '#e05c6e' },
     { label: 'Transaksi',   val: monthTxs.length + ' transaksi', color: '#7b72e0' },
   ].map(s => `<div class="summary-item"><span class="summary-label">${s.label}</span><span class="summary-value" style="color:${s.color}">${s.val}</span></div>`).join('');
 }
@@ -382,12 +385,13 @@ function initProfil() {
   });
   document.getElementById('close-edit').addEventListener('click', () => document.getElementById('modal-edit').classList.remove('open'));
   document.getElementById('btn-save-profil').addEventListener('click', () => {
-    const name = document.getElementById('edit-name').value.trim();
+    const name  = document.getElementById('edit-name').value.trim();
     const email = document.getElementById('edit-email').value.trim();
     if (!name) { showToast('Nama tidak boleh kosong'); return; }
     saveProfile({ name, email });
     document.getElementById('modal-edit').classList.remove('open');
-    renderProfile(); showToast('Profil diperbarui');
+    renderProfile();
+    showToast('Profil diperbarui');
   });
 
   document.getElementById('menu-target').addEventListener('click', () => document.getElementById('modal-target').classList.add('open'));
@@ -397,13 +401,15 @@ function initProfil() {
     if (!val || val <= 0) { showToast('Masukkan target yang valid'); return; }
     saveTarget(val);
     document.getElementById('modal-target').classList.remove('open');
-    renderProfile(); showToast('Target disimpan');
+    renderProfile();
+    showToast('Target disimpan');
   });
 
   document.getElementById('menu-reset').addEventListener('click', () => {
     if (!confirm('Reset semua data transaksi?')) return;
     saveTransactions([]);
-    renderProfile(); showToast('Data direset');
+    renderProfile();
+    showToast('Data direset');
   });
 
   document.querySelectorAll('.modal-overlay').forEach(o => {
@@ -412,7 +418,7 @@ function initProfil() {
 }
 
 /* ════════════════════════════════════
-   AUTO INIT — deteksi halaman aktif
+   AUTO INIT
 ════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   const page = document.body.dataset.page;
