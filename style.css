@@ -25,14 +25,36 @@
 html, body {
   min-height: 100vh;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: #d6d8e0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 32px 16px;
+  background: var(--bg);
   color: var(--text);
   font-size: 14px;
-  overflow-x: hidden;
+}
+
+/* ══ Remove iPhone frame — full screen layout ══ */
+.iphone-frame,
+.btn-action, .btn-vol-up, .btn-vol-down, .btn-power,
+.dynamic-island, .di-dot, .home-bar { display: none !important; }
+
+.iphone-screen {
+  position: static !important;
+  inset: auto !important;
+  border-radius: 0 !important;
+  width: 100% !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Make iphone-frame just a passthrough wrapper */
+.iphone-frame {
+  display: block !important;
+  position: static !important;
+  width: 100% !important;
+  height: 100vh !important;
+  background: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 /* ══ iPhone 16 Frame ══ */
