@@ -72,6 +72,38 @@ function renderTxList(containerId, txList) {
   }).join('');
 }
 
+/* ── Render transaction list dengan tombol hapus ── */
+function renderTxListDeletable(containerId, txList, onDelete) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!txList.length) { el.innerHTML = '<p class="tx-empty">Belum ada transaksi</p>'; return; }
+  el.innerHTML = txList.map((t, i) => {
+    const sign = t.type === 'pemasukan' ? '+' : '-';
+    const cls  = t.type === 'pemasukan' ? 'inc' : 'exp';
+    const icon = ICONS[t.cat] || ICONS['Lainnya'];
+    const dateLabel = new Date(t.date + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+    return `<div class="tx-item" data-id="${t.id}" style="animation-delay:${i * .04}s">
+      <div class="tx-icon">${icon}</div>
+      <div class="tx-info">
+        <p class="tx-desc">${t.desc}</p>
+        <p class="tx-meta">${t.cat} · ${dateLabel}</p>
+      </div>
+      <span class="tx-amount ${cls}">${sign}${fmtRp(t.amount)}</span>
+      <button class="tx-delete-btn" data-id="${t.id}" title="Hapus transaksi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+      </button>
+    </div>`;
+  }).join('');
+
+  el.querySelectorAll('.tx-delete-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      if (confirm('Hapus transaksi ini?')) onDelete(id);
+    });
+  });
+}
+
 /* ── Seed demo data ── */
 function seedIfEmpty() {
   // Reset data lama jika ada seed demo
@@ -567,7 +599,12 @@ function initDompet() {
     document.getElementById('saldo-bulan').textContent = new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
     let filtered = [...txs].sort((a, b) => b.date.localeCompare(a.date));
     if (currentFilter !== 'semua') filtered = filtered.filter(t => t.type === currentFilter);
-    renderTxList('tx-list', filtered);
+    renderTxListDeletable('tx-list', filtered, (id) => {
+      const updated = getTransactions().filter(t => String(t.id) !== String(id));
+      saveTransactions(updated);
+      showToast('Transaksi dihapus');
+      render();
+    });
   }
 
   render();

@@ -635,3 +635,16 @@ mark {
 }
 .toggle-switch input:checked + .toggle-slider { background: var(--pink-d); }
 .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+/* ══ Tombol hapus transaksi ══ */
+.tx-delete-btn {
+  background: none; border: none;
+  cursor: pointer; padding: 6px;
+  border-radius: 8px;
+  color: var(--sub);
+  flex-shrink: 0;
+  transition: background .15s, color .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.tx-delete-btn svg { width: 16px; height: 16px; }
+.tx-delete-btn:hover { background: #fff0f2; color: var(--pink-d); }
