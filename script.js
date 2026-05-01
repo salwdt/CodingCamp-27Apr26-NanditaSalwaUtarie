@@ -99,7 +99,8 @@ function renderTxListDeletable(containerId, txList, onDelete) {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const id = btn.dataset.id;
-      if (confirm('Hapus transaksi ini?')) onDelete(id);
+      // Hapus langsung tanpa confirm (confirm() bisa diblokir browser)
+      onDelete(id);
     });
   });
 }
@@ -617,7 +618,9 @@ function initDompet() {
     let filtered = [...txs].sort((a, b) => b.date.localeCompare(a.date));
     if (currentFilter !== 'semua') filtered = filtered.filter(t => t.type === currentFilter);
     renderTxListDeletable('tx-list', filtered, (id) => {
-      const updated = getTransactions().filter(t => String(t.id) !== String(id));
+      const all = getTransactions();
+      const deleted = all.find(t => String(t.id) === String(id));
+      const updated = all.filter(t => String(t.id) !== String(id));
       saveTransactions(updated);
       showToast('Transaksi dihapus');
       render();
