@@ -108,8 +108,64 @@ function initDashboard() {
 
   const recent = [...txs].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
   renderTxList('tx-list', recent);
-}
 
+  // ── Search ──
+  const overlay   = document.getElementById('search-overlay');
+  const input     = document.getElementById('search-input');
+  const results   = document.getElementById('search-results');
+  const btnSearch = document.getElementById('btn-search');
+  const btnClose  = document.getElementById('search-close');
+
+  function openSearch() {
+    overlay.classList.add('open');
+    setTimeout(() => input.focus(), 100);
+  }
+  function closeSearch() {
+    overlay.classList.remove('open');
+    input.value = '';
+    results.innerHTML = '<p class="search-hint">Ketik untuk mencari transaksi</p>';
+  }
+
+  btnSearch.addEventListener('click', openSearch);
+  btnClose.addEventListener('click', closeSearch);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeSearch(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSearch(); });
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    if (!q) {
+      results.innerHTML = '<p class="search-hint">Ketik untuk mencari transaksi</p>';
+      return;
+    }
+    const found = getTransactions().filter(t =>
+      t.desc.toLowerCase().includes(q) ||
+      t.cat.toLowerCase().includes(q) ||
+      fmtRp(t.amount).toLowerCase().includes(q)
+    ).sort((a, b) => b.date.localeCompare(a.date));
+
+    if (!found.length) {
+      results.innerHTML = '<p class="search-empty">Tidak ada transaksi ditemukan</p>';
+      return;
+    }
+    const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const hl = str => str.replace(re, '<mark>$1</mark>');
+
+    results.innerHTML = found.map(t => {
+      const sign = t.type === 'pemasukan' ? '+' : '-';
+      const cls  = t.type === 'pemasukan' ? 'inc' : 'exp';
+      const icon = ICONS[t.cat] || ICONS['Lainnya'];
+      const dateLabel = new Date(t.date + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+      return `<div class="search-item">
+        <div class="tx-icon">${icon}</div>
+        <div class="search-item-info">
+          <p class="search-item-desc">${hl(t.desc)}</p>
+          <p class="search-item-meta">${hl(t.cat)} · ${dateLabel}</p>
+        </div>
+        <span class="search-item-amount ${cls}">${sign}${fmtRp(t.amount)}</span>
+      </div>`;
+    }).join('');
+  });
+}
 /* ════════════════════════════════════
    STATISTIK
 ════════════════════════════════════ */
